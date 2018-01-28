@@ -1,4 +1,5 @@
-//import { testDouble, expect } from './config/helpers';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 describe('Testes Unitários do Controller', function () {
     describe('Método Create', function () {
         it('Deve criar um novo usuário', function () {

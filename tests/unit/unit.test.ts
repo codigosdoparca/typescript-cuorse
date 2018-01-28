@@ -1,4 +1,4 @@
-//import { testDouble, expect } from './config/helpers';
+import { testDouble, expect } from './config/helpers';
 
 describe('Testes Unitários do Controller', () => {
     describe('Método Create', () => {
