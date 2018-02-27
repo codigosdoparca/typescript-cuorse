@@ -1,3 +1,4 @@
+import * as jwt from 'jwt-simple';
 import * as HTTPStatus from 'http-status';
 import { app, request, expect } from './config/helpers';
 
@@ -8,6 +9,7 @@ describe('Testes de Integração', () => {
     const model = require('../../server/models');
 
     let id;
+    let token;
 
     const userTest = {
         id: 100,
@@ -18,12 +20,12 @@ describe('Testes de Integração', () => {
 
     const userDefault = {
         id: 1,
-        name: 'Default User',
-        email: 'default@email.com',
-        password: 'default'
+        name: 'Joao',
+        email: 'joao@email.com',
+        password: '123'
     };
 
-    beforeEach((done) => {
+ beforeEach((done) => {
         model.User.destroy({
             where: {}
         })
@@ -33,10 +35,45 @@ describe('Testes de Integração', () => {
         .then(user => {
             model.User.create(userTest)
             .then(() => {
+                token = jwt.encode({id: user.id}, config.secret);
                 done();
             })
         })
     });
+
+    describe('POST /token', () => {
+        it('Deve receber um JWT', done => {
+            const credentials = {
+                email: userDefault.email,
+                password: userDefault.password
+            };
+
+            request(app)
+                .post('/token')
+                .send(credentials)
+                .end((error, res) => {
+                    expect(res.status).to.equal(HTTPStatus.OK);
+                    expect(res.body.token).to.equal(`${token}`);
+                    done(error);                    
+                });
+        });
+
+
+        it('Não deve gerar token', done => {
+            const credentials = {
+                email: 'email@emailqualquer.com',
+                password: 'qualquer'
+            };
+            request(app)
+            .post('/token')
+            .send(credentials)
+            .end((error, res) => {
+               expect(res.status).to.equal(HTTPStatus.UNAUTHORIZED);
+               expect(res.body).to.empty;
+               done(error);
+            })
+        })
+    }) 
     
   describe('GET /api/users/all', () =>{
         it('Deve retornar um Array com todos os Usuários', done => {
@@ -110,6 +147,7 @@ describe('Testes de Integração', () => {
             .del(`/api/users/${userTest.id}/destroy`)
             .end((error, res) => {
               expect(res.status).to.equal(HTTPStatus.OK);
+              done(error);
             });
         });
       });

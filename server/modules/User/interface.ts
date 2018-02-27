@@ -1,5 +1,4 @@
-importimport { userInfo } from "os";
- default from "../../api/api";
+import User from '../../modules/User/service'
 
 export interface IUser {
    readonly id: number,

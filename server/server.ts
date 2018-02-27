@@ -13,4 +13,5 @@ models.sequelize.sync().then(() => {
   //server.listen(process.env.PORT);
   server.on('listening', () => console.log(`Servidor está rodando na porta ${config.serverPort}`));
   server.on('error', (error: NodeJS.ErrnoException) => console.log(`Ocorreu um erro: ${error}`));
+  
 });
