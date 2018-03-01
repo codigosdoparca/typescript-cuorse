@@ -17,7 +17,7 @@ describe('Testes de Integração', function () {
     };
     var userDefault = {
         id: 1,
-        name: 'Joao',
+        name: 'joao',
         email: 'joao@email.com',
         password: '123'
     };
@@ -51,7 +51,7 @@ describe('Testes de Integração', function () {
                 done(error);
             });
         });
-        it('Não deve gerar token', function (done) {
+        it('Não deve gerar Token', function (done) {
             var credentials = {
                 email: 'email@emailqualquer.com',
                 password: 'qualquer'
@@ -70,6 +70,8 @@ describe('Testes de Integração', function () {
         it('Deve retornar um Array com todos os Usuários', function (done) {
             helpers_1.request(helpers_1.app)
                 .get('/api/users/all')
+                .set('Content-Type', 'Application/Json')
+                .set('Authorization', "JWT " + token)
                 .end(function (error, res) {
                 helpers_1.expect(res.status).to.equal(HTTPStatus.OK);
                 helpers_1.expect(res.body.payload).to.be.an('array');
@@ -83,6 +85,8 @@ describe('Testes de Integração', function () {
         it('Deve retornar um Array com apenas um Usuário', function (done) {
             helpers_1.request(helpers_1.app)
                 .get("/api/users/" + userDefault.id)
+                .set('Content-Type', 'Application/Json')
+                .set('Authorization', "JWT " + token)
                 .end(function (error, res) {
                 helpers_1.expect(res.status).to.equal(HTTPStatus.OK);
                 helpers_1.expect(res.body.payload.id).to.be.equal(userDefault.id);
@@ -97,13 +101,15 @@ describe('Testes de Integração', function () {
     describe('PUT /api/users/create', function () {
         it('Deve atualizar um Usuário', function (done) {
             var user = {
-                id: 2,
+                id: 1,
                 name: 'Test',
                 email: 'usuario@email.com',
                 password: 'novouser'
             };
             helpers_1.request(helpers_1.app)
                 .get('/api/users/create')
+                .set('Content-Type', 'Application/Json')
+                .set('Authorization', "JWT " + token)
                 .send(user)
                 .end(function (error, res) {
                 helpers_1.expect(res.status).to.equal(HTTPStatus.OK);
@@ -122,6 +128,8 @@ describe('Testes de Integração', function () {
             };
             helpers_1.request(helpers_1.app)
                 .put("/api/users/" + userTest.id + "/update")
+                .set('Content-Type', 'Application/Json')
+                .set('Authorization', "JWT " + token)
                 .send(user)
                 .end(function (error, res) {
                 helpers_1.expect(res.status).to.equal(HTTPStatus.OK);
@@ -132,6 +140,8 @@ describe('Testes de Integração', function () {
         it('Deve remover um usário', function (done) {
             helpers_1.request(helpers_1.app)
                 .del("/api/users/" + userTest.id + "/destroy")
+                .set('Content-Type', 'Application/Json')
+                .set('Authorization', "JWT " + token)
                 .end(function (error, res) {
                 helpers_1.expect(res.status).to.equal(HTTPStatus.OK);
                 done(error);

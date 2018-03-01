@@ -31,7 +31,7 @@ function AuthConfig() {
             return passport.initialize();
         },
         authenticate: function () {
-            passport.authenticate('jwt', { session: false });
+            return passport.authenticate('jwt', { session: false });
         }
     };
 }

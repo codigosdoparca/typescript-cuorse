@@ -29,12 +29,12 @@ passport.use(new Strategy(opts, (jwtPayload, done) => {
   });
 }));
 
-    return {
+return {
         initialize: () => {
             return passport.initialize();
         },
         authenticate: () => {
-            passport.authenticate('jwt', {session: false});
+            return passport.authenticate('jwt', {session: false});
         }
     }
 }
